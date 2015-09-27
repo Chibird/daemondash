@@ -9,9 +9,10 @@ import pickle
 
 from flask import Flask
 from flask import request
+from flask import render_template
 import specific_user
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
 classifier_pickle = "classifier.pickle"
 vectorizer_pickle = "vectorizer.pickle"
@@ -24,6 +25,10 @@ num = -1
 def logistic(value):
 	return 1.0 / (1 + numpy.exp(-10*(value - 0.5)))
 
+@app.route('/test/')
+def render_fn():
+	return app.send_static_file('test.html')
+
 @app.route('/input', methods=['POST'])
 def input_fn():
 	if request.method == 'POST':
@@ -31,6 +36,7 @@ def input_fn():
 		current_user = request.form['user']
 		global num
 		num = request.form['num']
+		return ""
 
 
 
@@ -49,7 +55,7 @@ def output_fun():
 	for tweet in timeline:
 		texts.append(tweet.text)
 
-	print(logistic(numpy.mean(classifier.predict(vectorizer.transform(texts))) / 4.0))
+	return str(logistic(numpy.mean(classifier.predict(vectorizer.transform(texts))) / 4.0))
 
 if __name__ == '__main__':
     app.run()

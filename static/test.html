@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <head>
     <meta HTTP-EQUIV="X-UA-COMPATIBLE" CONTENT="IE=EmulateIE9" >
-    <script type="text/javascript" src="scripts/d3.min.js"></script>
-    <script type="text/javascript" src="scripts/radialProgress.js"></script>
-    <script src="http://d3js.org/d3.v3.min.js" language="JavaScript"></script>
-    <script src="scripts/liquidFillGauge.js" language="JavaScript"></script>
+    <script type="text/javascript" src="/static/scripts/d3.min.js"></script>
+    <script type="text/javascript" src="/static/scripts/radialProgress.js"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="scripts/index.js" language="JavaScript"></script>
+    <script src="/static/scripts/index.js" language="JavaScript"></script>
+    <script src="http://d3js.org/d3.v3.min.js" language="JavaScript"></script>
+    <script src="/static/scripts/liquidFillGauge.js" language="JavaScript"></script>
 
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-    <link type="text/css" rel="stylesheet" href="styles/style.css">
-    <link type="text/css" rel="stylesheet" href="style.css">
+    <link type="text/css" rel="stylesheet" href="/static/style2.css">
+    <link type="text/css" rel="stylesheet" href="/static/style.css">
 
     <base href="http://127.0.0.1:5000/"/>
 
@@ -22,15 +23,19 @@
         POLARIZE
     </div>
     <div class="glass">
+        <div id='description'>
+            <div id='description2'>
         <p> Your overall media positivity is 55%.
         <br> A glass half-full kind of person. </p>
-        <svg id="fillgauge1" width="97%" height="250" onclick="gauge1.update(NewValue());"></svg>
+            </div>
+        </div>
+        <svg id="fillgauge1" width="97%" height="250"></svg>
     </div>
-    <div id='outer'>
+<!--     <div id='outer'>
         <div class="radial" id="div1"></div>
         <div class="radial" id="div2"></div>
         <div class="radial" id="div3"></div>
-    </div>
+    </div> -->
     <!--MARK ELEMENTS-->
     <div id='twitter' style='text-align:center'>
         <p>Username:</p>
@@ -46,8 +51,39 @@
         //process username
         $.post( "/input", { user: username, num: 50 })
             .done(function( data ) {
-                alert( "Data Loaded: " + data );
+
             });
+
+        $.get( "/output", function (data) {
+
+            console.log(data);
+            gauge1.update(data*100);
+            var descr = document.getElementById('description2');
+            if (data > .95) {
+                descr.innerHTML = "There's a Sodium atom and he says to the Chlorine atom, \"You took my electron.\" The sodium atiom asks, \"Are you sure?\" The Chlorine atom replys, \"I'm positive.\"";
+            } else if (data > .9) {
+                descr.innerHTML = "Impressive!";
+            } else if (data > .7) {
+                descr.innerHTML = "Very good!";
+            } else if (data > .6) {
+                descr.innerHTML = "Solid score.";
+            } else if (data > .5) {
+                descr.innerHTML = "Your glass is about half full.";
+            } else if (data > .4) {
+                descr.innerHTML = "Your glass is about half empty.";
+            } else if (data > .3) {
+                descr.innerHTML = "Don't worry, be happy!";
+            } else if (data > .2) {
+                descr.innerHTML = "Things are looking dire.";
+            } else if (data > .1) {
+                descr.innerHTML = "Keep on playing that tiny violin!";
+            } else {
+                descr.innerHTML = "Are you perhaps related to Oscar the Grouch?";
+            }
+
+            return data;
+
+        });
 
         // $.ajax({
         //     type: "post",
@@ -158,7 +194,9 @@
 
 </script>
     <script>
-        var gauge1 = loadLiquidFillGauge("fillgauge1", 55);
+        var data = predict();
+        console.log(data);
+        var gauge1 = loadLiquidFillGauge("fillgauge1", 0);
         var config1 = liquidFillGaugeDefaultSettings();
         config1.circleColor = "#FF7777";
         config1.textColor = "#FF4444";
@@ -168,13 +206,17 @@
         config1.textVertPosition = 0.2;
         config1.waveAnimateTime = 5000;
 
-        function NewValue(){
-            if(Math.random() > .5){
-                return Math.round(Math.random()*100);
-            } else {
-                return (Math.random()*100).toFixed(1);
-            }
-        }
+        // function NewValue(){
+        //     if(Math.random() > .5){
+        //         return Math.round(Math.random()*100);
+        //     } else {
+        //         return (Math.random()*100).toFixed(1);
+        //     }
+        // }
+
+        // function NewValue(data){
+        //     return data;
+        // }
     </script>
 
     <!--MARK SCRIPT TESTING-->
