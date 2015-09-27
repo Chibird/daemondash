@@ -32,6 +32,13 @@
         <div class="radial" id="div3"></div>
     </div>
 
+    <!--MARK ELEMENTS-->
+    <div id='twitter'>
+        <p>Username:</p>
+        <input id='username'>
+        <input type='button' onClick='stuff()' value='Gauge!'/>
+    </div>
+
 
 
 <script language="JavaScript">
@@ -108,8 +115,6 @@
 
 
 
-
-
 </script>
     <script>
         var gauge1 = loadLiquidFillGauge("fillgauge1", 55);
@@ -128,6 +133,14 @@
             } else {
                 return (Math.random()*100).toFixed(1);
             }
+        }
+    </script>
+
+    <!--MARK SCRIPT TESTING-->
+    <script type="text/javascript">
+        function stuff() {
+            var name = document.getElementById('username').value;
+            alert(name);
         }
     </script>
 </body>
