@@ -6,7 +6,7 @@ access_token_secret = "wPrD23Gf5yUyWJvzh0g5UpetAb8FhRlMWcShyrqa7ptDl"
 consumer_key = "ybav8hpAJRxlCt3AFXTyzq6CN"
 consumer_secret = "ApG56qNb1Y5C4BJF8xOVzBh2dIOCv5eIvLHIyFA5LXTAl8YPbx"
 
-if __name__ == '__main__':
+def get_tweets(username, number):
     # Create authentication token
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
@@ -14,8 +14,6 @@ if __name__ == '__main__':
     api = tweepy.API(auth)
     
     # Get information about the user    
-    user = api.get_user(raw_input('Enter a username: '))
-    c = eval(raw_input('Number of tweets?: '))
-    timeline = api.user_timeline(user.id, include_rts=True, count=c)
-    for tweet in timeline:
-        print (tweet.text)
+    user = api.get_user(username)
+    timeline = api.user_timeline(user.id, include_rts=False, count=number)
+    return timeline
