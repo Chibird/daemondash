@@ -15,33 +15,40 @@
 
     <base href="http://127.0.0.1:5000/"/>
 
-    <title> :) </title>
+    <title> POLARITY </title>
+
 </head>
 
 <body>
     <div id = "header_nav">
-        POLARIZE
+        <img src="/static/logo2.png">
+        
     </div>
     <div class="glass">
         <div id='description'>
             <div id='description2'>
-        <p> Your overall media positivity is 55%.
-        <br> A glass half-full kind of person. </p>
+        <p> Find your positivity score. 
+            <br> Put in your Twitter username.</p>
             </div>
         </div>
         <svg id="fillgauge1" width="97%" height="250"></svg>
     </div>
+    <div class="centerwords">
+        <div id='twitter' style='text-align:center'>
+        <!-- <p>Username:</p> -->
+        <input id='username'>
+        <input type='button' id='pred' onClick='predict()' value='Gauge!'/>
+    </div>
+    Your top words:
+    <div id="wordlist"> </div>
+</div>
 <!--     <div id='outer'>
         <div class="radial" id="div1"></div>
         <div class="radial" id="div2"></div>
         <div class="radial" id="div3"></div>
     </div> -->
     <!--MARK ELEMENTS-->
-    <div id='twitter' style='text-align:center'>
-        <p>Username:</p>
-        <input id='username'>
-        <input type='button' id='pred' onClick='predict()' value='Gauge!'/>
-    </div>
+
 
 <script type="text/javascript">
     function predict() {
@@ -49,24 +56,49 @@
         var username = document.getElementById('username').value;
         
         //process username
-        $.post( "/input", { user: username, num: 50 })
+        $.post( "/input", { user: username, num: 150 })
             .done(function( data ) {
 
             });
 
-        $.get( "/output", function (data) {
-
+        $.get( "/output", function (data1) {
+            var datafull = data1.split(" ");
+            console.log(datafull);
+            var data = datafull[0];
             console.log(data);
+
+            var list = document.getElementById('wordlist');
+
+            var html = "";
+            for (i = 1; i < datafull.length - 1 ; i++) {
+                console.log(datafull[i]);
+                if (i%2 !=0) {
+                    console.log(parseInt(datafull[i]) +1);
+                    if ((parseInt(datafull[i+1])) == 4) {
+                        html += "<span style='color:#2acde5'>"+datafull[i]+"</span>";
+
+                    } else {
+                        html += "<span style='color:#eb2415'>"+datafull[i]+"</span>";
+
+                    }
+                    
+                    html += "<br>";
+                }
+            }
+
+            list.innerHTML = html;
+            console.log(html);
+
             gauge1.update(data*100);
             var descr = document.getElementById('description2');
             if (data > .95) {
-                descr.innerHTML = "There's a Sodium atom and he says to the Chlorine atom, \"You took my electron.\" The sodium atiom asks, \"Are you sure?\" The Chlorine atom replys, \"I'm positive.\"";
+                descr.innerHTML = "There's a Sodium atom and he says to the Chlorine atom, \"You took my electron.\" The sodium atom asks, \"Are you sure?\" The Chlorine atom replys, \"I'm positive.\"";
             } else if (data > .9) {
-                descr.innerHTML = "Impressive!";
+                descr.innerHTML = "Impressive! What an optimist!";
             } else if (data > .7) {
-                descr.innerHTML = "Very good!";
+                descr.innerHTML = "Very good! The future is so bright you have to wear shades.";
             } else if (data > .6) {
-                descr.innerHTML = "Solid score.";
+                descr.innerHTML = "Solid score. What a sunny personality.";
             } else if (data > .5) {
                 descr.innerHTML = "Your glass is about half full.";
             } else if (data > .4) {
@@ -85,6 +117,9 @@
 
         });
 
+        // $.get( "/outputwords", function (data) {
+        //     console.log(data);
+        // });
         // $.ajax({
         //     type: "post",
         //     url: '/input',
@@ -118,7 +153,16 @@
         
     }
 </script>
-
+<script >
+       var gauge1 = loadLiquidFillGauge("fillgauge1", 0);
+        var config1 = liquidFillGaugeDefaultSettings();
+        config1.circleColor = "#6B6B6B";
+        config1.textColor = "#FF4444";
+        config1.waveTextColor = "#FFAAAA";
+        config1.waveColor = "#6B6B6B";
+        config1.circleThickness = 0.2;
+        config1.textVertPosition = 0.2;
+        config1.waveAnimateTime = 5000;</script>
 <script language="JavaScript">
 
 
@@ -194,17 +238,9 @@
 
 </script>
     <script>
-        var data = predict();
-        console.log(data);
-        var gauge1 = loadLiquidFillGauge("fillgauge1", 0);
-        var config1 = liquidFillGaugeDefaultSettings();
-        config1.circleColor = "#FF7777";
-        config1.textColor = "#FF4444";
-        config1.waveTextColor = "#FFAAAA";
-        config1.waveColor = "#FFDDDD";
-        config1.circleThickness = 0.2;
-        config1.textVertPosition = 0.2;
-        config1.waveAnimateTime = 5000;
+        // var data = predict();
+        // console.log(data);
+ 
 
         // function NewValue(){
         //     if(Math.random() > .5){
@@ -221,6 +257,7 @@
 
     <!--MARK SCRIPT TESTING-->
     <script type="text/javascript">
+
         function post(path, params) {
             // The rest of this code assumes you are not using a library.
             // It can be made less wordy if you use one.

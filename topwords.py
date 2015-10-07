@@ -38,4 +38,4 @@ def top_words(classifier, vectorizer, timeline, n):
 	for i in range(0, len(words)):
 		words[i] = (words[i], sentiments[i])
 
-	print(words)
+	return words

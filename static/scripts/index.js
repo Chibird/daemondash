@@ -13,8 +13,8 @@ $(window).scroll(function(){
             },600);
             $('#header_nav').stop().animate({
                 fontSize:'25px',
-                marginLeft: '0px',
-                marginTop: '20px'
+                marginLeft: '-50px',
+                marginTop: '-30px'
             },600);
         }
     }
@@ -28,8 +28,8 @@ $(window).scroll(function(){
             },600);
             $('#header_nav').stop().animate({
                 fontSize:'82px',
-                marginLeft: '525px',
-                marginTop: '100px'
+                marginLeft: '510px',
+                marginTop: '0px'
             },600);
         }
     }
